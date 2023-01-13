@@ -5,3 +5,5 @@
 /Dismemberment/obj
 /Dismemberment/bin/Release/net481/ScriptHookVDotNet3.xml
 /.vs/Dismemberment/FileContentIndex
+*.v2
+/.vs/ProjectEvaluation
