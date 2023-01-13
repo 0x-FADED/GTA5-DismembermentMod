@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Dismemberment/obj
+/Dismemberment/bin/Release/net481/ScriptHookVDotNet3.xml
+/.vs/Dismemberment/FileContentIndex
