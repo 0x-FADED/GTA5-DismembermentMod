@@ -40,11 +40,16 @@ namespace Dismemberment
             else
             {
                 Screen.ShowHelpText("~b~dismemberment.rpf ~r~not found! ~w~please re-install the mod correctly", -1, false, true);
+                Notification.Show("~b~dismemberment.rpf ~r~not found! ~w~please re-install the mod correctly",false);
             }
         }
 
         private void OnAborted(object sender, EventArgs e)
         {
+            if(Screen.IsHelpTextDisplayed)
+            {
+                Screen.ClearHelpText();
+            }
             foreach (Prop prop in caps)
             {
                 prop.Delete();
