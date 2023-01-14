@@ -16,6 +16,16 @@ namespace Dismemberment
         [DllImport("DismembermentASI.asi", CharSet = CharSet.Auto)]
         private static extern void RemoveBoneDraw(int handle);
 
+        private List<Prop> caps = new List<Prop>();
+
+        private List<Prop> chunks = new List<Prop>();
+
+        private string[] dismembermentWpns = new string[0];
+
+        private int chunkTimer;
+
+        private Random rand = new Random();
+
         public Main()
         {
             Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, "scr_solomon3");
@@ -237,15 +247,5 @@ namespace Dismemberment
                 }
             }
         }
-
-        private List<Prop> caps = new List<Prop>();
-
-        private List<Prop> chunks = new List<Prop>();
-
-        private string[] dismembermentWpns = new string[0];
-
-        private int chunkTimer;
-
-        private Random rand = new Random();
     }
 }

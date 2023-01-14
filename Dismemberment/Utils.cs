@@ -8,12 +8,9 @@ namespace Dismemberment
     {
         public static int GetLastDamageBone(this Ped ped)
         {
-            unsafe
-            {
-                int boneID;
-                Function.Call<bool>(Hash.GET_PED_LAST_DAMAGE_BONE, ped, &boneID);
-                return (int)(Bone)boneID;
-            }
+            var outputArgument = new OutputArgument();
+            Function.Call<int>(Hash.GET_PED_LAST_DAMAGE_BONE, ped, outputArgument);
+            return outputArgument.GetResult<int>();
         }
 
         public static Ped CloneMe(this Ped ped, Vector3 coords, float heading)
