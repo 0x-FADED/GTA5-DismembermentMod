@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using GTA;
+using GTA.UI;
 using GTA.Math;
 using GTA.Native;
 
@@ -28,11 +29,18 @@ namespace Dismemberment
 
         public Main()
         {
-            Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, "scr_solomon3");
-            Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, "scr_fbi1");
-            dismembermentWpns = File.ReadAllLines("scripts/DismembermentWeapons.cfg");
-            Tick += OnTick;
-            Aborted += OnAborted;
+            if (Utils.IsDLCinstalled())
+            {
+                Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, "scr_solomon3");
+                Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, "scr_fbi1");
+                dismembermentWpns = File.ReadAllLines("scripts/DismembermentWeapons.cfg");
+                Tick += OnTick;
+                Aborted += OnAborted;
+            }
+            else
+            {
+                Screen.ShowHelpText("~b~dismemberment.rpf ~r~not found! ~w~please re-install the mod correctly", -1, false, true);
+            }
         }
 
         private void OnAborted(object sender, EventArgs e)

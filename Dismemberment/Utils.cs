@@ -1,11 +1,16 @@
 ﻿using GTA;
 using GTA.Math;
 using GTA.Native;
+using System;
 
 namespace Dismemberment
 {
     public static class Utils
     {
+        public static bool IsDLCinstalled()
+        {
+            return Function.Call<bool>(Hash.IS_DLC_PRESENT, rage.atHashString.GetHashKey("dismemberment"));
+        }
         public static int GetLastDamageBone(this Ped ped)
         {
             var outputArgument = new OutputArgument();
