@@ -2,16 +2,16 @@
 
 namespace Dismemberment
 {
-	public class Settings : Script
+	public static class Settings
 	{
-		public Settings()
+		public static void LoadSettings()
 		{
-			iniFile = ScriptSettings.Load("scripts\\Dismemberment.toml");
-            dismemberTorso = iniFile.GetValue("Settings", "bDismemberTorso", true);
-            pedPainSound = iniFile.GetValue("Settings", "bPedPainSound", true);
+			toml = ScriptSettings.Load("scripts\\Dismemberment.toml");
+            dismemberTorso = toml.GetValue("Settings", "bDismemberTorso", true);
+            pedPainSound = toml.GetValue("Settings", "bPedPainSound", true);
 		}
 
-		private ScriptSettings iniFile;
+		private static ScriptSettings toml;
 
 		public static bool dismemberTorso;
 
