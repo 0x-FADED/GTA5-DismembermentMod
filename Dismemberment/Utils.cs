@@ -2,6 +2,7 @@
 using GTA.Math;
 using GTA.Native;
 using System;
+using System.Drawing;
 
 namespace Dismemberment
 {
@@ -11,6 +12,12 @@ namespace Dismemberment
         {
             return Function.Call<bool>(Hash.IS_DLC_PRESENT, rage.atHashString.GetHashKey("dismemberment"));
         }
+
+        public static int GetPedType(this Ped ped)
+        {
+            return Function.Call<int>(Hash.GET_PED_TYPE, ped);
+        }
+
         public static int GetLastDamageBone(this Ped ped)
         {
             var outputArgument = new OutputArgument();

@@ -58,7 +58,7 @@ namespace Dismemberment
         {
             foreach (Ped ped in World.GetNearbyPeds(Game.Player.Character, 150f))
             {
-                if (ped.GetLastDamageBone() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && Function.Call<int>(Hash.GET_PED_TYPE, ped) != 28)
+                if (ped.GetLastDamageBone() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && ped.Exists() && ped.GetPedType() != 28)
                 {
                     foreach (string text in dismembermentWpns)
                     {
@@ -239,12 +239,12 @@ namespace Dismemberment
                 AddBoneDraw(ped.Handle, start, end);
                 Function.Call(Hash.USE_PARTICLE_FX_ASSET, "scr_solomon3");
                 Function.Call(Hash.START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE,
-                    "scr_trev4_747_blood_impact", ped, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, start, 0.3f,
+                    "scr_trev4_747_blood_impact", ped, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, start, 0.3f,
                     false, false, false
                 );
                 Function.Call(Hash.USE_PARTICLE_FX_ASSET, "scr_fbi1");
                 Function.Call(Hash.START_PARTICLE_FX_NON_LOOPED_ON_PED_BONE,
-                    "scr_fbi_autopsy_blood", ped, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, start, 0.45f,
+                    "scr_fbi_autopsy_blood", ped, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, start, 0.45f,
                     false, false, false
                 );
                 ped.MarkAsNoLongerNeeded();
