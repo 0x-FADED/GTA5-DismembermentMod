@@ -1,13 +1,11 @@
-/// <summary>
-/// Represents a class for generating hash keys compatible with GTA 5 file formats.
-/// </summary>
+using System.Text;
+
 namespace rage
 {
-    public static class atHashString
+    public static class AtHashString
     {
-        // copied directly from the game -- performs uppercase to lowercase conversions amongst other things
         private static readonly byte[]
-            m_LookupTable =
+            LookupTable =
             {
             0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A,
             0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
@@ -35,71 +33,25 @@ namespace rage
             0xFD, 0xFE, 0xFF
         };
 
-        private static uint GetHashKeySubString(string str, uint initialHash)
-        {
-            var hash = initialHash;
-            for (int i = 0; i < str.Length; i++)
-            {
-                hash += m_LookupTable[str[i]];
-                hash += (hash << 10);
-                hash ^= (hash >> 6);
-            }
-            return hash;
-        }
-
-        private static uint GetHashKeyFinalize(string str, uint initialHash)
-        {
-            var hash = GetHashKeySubString(str, initialHash);
-            hash += (hash << 3);
-            hash ^= (hash >> 11);
-            hash += (hash << 15);
-            return hash;
-        }
-
-        /// <summary>
-        /// Gets the hash key of the specified string.
-        /// </summary>
-        /// <param name="str">The string used to generate a hash key.</param>
-        /// <returns>A hash key compatible with GTA 5.</returns>
         public static uint GetHashKey(string str)
-        {
-            return GetHashKey(str, 0);
-        }
+        {       
+            uint hash = 0;
 
-        /// <summary>
-        /// Gets the hash key of the specified string, using an initial hash key value.
-        /// </summary>
-        /// <param name="str">The string used to generate a hash key.</param>
-        /// <param name="initialHash">The initial hash key value used to generate the result.</param>
-        /// <returns>A hash key compatible with GTA 5.</returns>
-        public static uint GetHashKey(string str, uint initialHash)
-        {
-            return GetHashKeyFinalize(str, initialHash);
-        }
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                byte[] UTF8Bytes = Encoding.UTF8.GetBytes(str);
+                for (int i = 0; i < UTF8Bytes.Length; i++)
+                {
+                    hash += LookupTable[UTF8Bytes[i]];
+                    hash += (hash << 10);
+                    hash ^= (hash >> 6);
+                }
+                hash += (hash << 3);
+                hash ^= (hash >> 11);
+                hash += (hash << 15);
+            }
 
-        /// <summary>
-        /// Gets the hash key of the specified string concatenated with an additional string.
-        /// </summary>
-        /// <param name="str">The string used to generate a hash key.</param>
-        /// <param name="concat">The additional string to concatenate to the input string.</param>
-        /// <returns>A hash key compatible with GTA 5.</returns>
-        public static uint GetHashKey(string str, string concat)
-        {
-            return GetHashKey(str, concat, 0);
-        }
-
-        /// <summary>
-        /// Gets the hash key of the specified string concatenated with an additional string, using an initial hash key value.
-        /// </summary>
-        /// <param name="str">The string used to generate a hash key.</param>
-        /// <param name="concat">The additional string to concatenate to the input string.</param>
-        ///
-        /// <param name="initialHash">The initial hash key value used to generate the result.</param>
-        /// <returns>A hash key compatible with GTA 5.</returns>
-        public static uint GetHashKey(string str, string concat, uint initialHash)
-        {
-            return GetHashKeyFinalize(concat,
-            GetHashKeySubString(str, initialHash));
+            return hash;
         }
     }
 }

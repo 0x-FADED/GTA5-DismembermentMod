@@ -16598,6 +16598,32 @@
             </summary>
             <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.ContainerElement" /> using a <see cref="P:GTA.UI.Screen.ScaledWidth" />*720 pixel base.</param>
         </member>
+        <member name="M:GTA.UI.ContainerElement.WorldDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.ContainerElement"/> this frame in the specified <see cref="T:GTA.Math.Vector3"/> position.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.ContainerElement"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.ContainerElement.WorldDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.ContainerElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.ContainerElement"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.ContainerElement"/> using a 1280*720 pixel base.</param>
+        </member>
+        <member name="M:GTA.UI.ContainerElement.WorldScaledDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.ContainerElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.ContainerElement"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.ContainerElement.WorldScaledDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.ContainerElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.ContainerElement"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.ContainerElement"/> using a <see cref="P:GTA.UI.Screen.ScaledWidth"/>*720 pixel base.</param>
+        </member>
         <member name="T:GTA.UI.CursorSprite">
             <summary>
             An enumeration of all possible cursor sprites.
@@ -16725,6 +16751,32 @@
             Draws the <see cref="T:GTA.UI.CustomSprite" /> at the specified offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth" />.
             </summary>
             <param name="offset">The offset.</param>
+        </member>
+        <member name="M:GTA.UI.CustomSprite.WorldDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.CustomSprite"/> this frame in the specified <see cref="T:GTA.Math.Vector3"/> position.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.CustomSprite"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.CustomSprite.WorldDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.CustomSprite"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.CustomSprite"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.CustomSprite"/> using a 1280*720 pixel base.</param>
+        </member>
+        <member name="M:GTA.UI.CustomSprite.WorldScaledDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.CustomSprite"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.CustomSprite"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.CustomSprite.WorldScaledDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.CustomSprite"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.CustomSprite"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.CustomSprite"/> using a <see cref="P:GTA.UI.Screen.ScaledWidth"/>*720 pixel base.</param>
         </member>
         <member name="T:GTA.UI.Font">
             <summary>
@@ -16918,6 +16970,32 @@
             <summary>
             Draws this <see cref="T:GTA.UI.IElement"/> this frame at the specified offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
             </summary>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.IElement"/> using a <see cref="P:GTA.UI.Screen.ScaledWidth"/>*720 pixel base.</param>
+        </member>
+        <member name="M:GTA.UI.IElement.WorldDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.IElement"/> this frame in the specified <see cref="T:GTA.Math.Vector3"/> position.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.IElement"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.IElement.WorldDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.IElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.IElement"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.IElement"/> using a 1280*720 pixel base.</param>
+        </member>
+        <member name="M:GTA.UI.IElement.WorldScaledDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.IElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.IElement"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.IElement.WorldScaledDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.IElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.IElement"/> to be drawn</param>
             <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.IElement"/> using a <see cref="P:GTA.UI.Screen.ScaledWidth"/>*720 pixel base.</param>
         </member>
         <member name="P:GTA.UI.ISpriteElement.Size">
@@ -17295,6 +17373,32 @@
             </summary>
             <param name="offset">The offset.</param>
         </member>
+        <member name="M:GTA.UI.Sprite.WorldDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.Sprite"/> this frame in the specified <see cref="T:GTA.Math.Vector3"/> position.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.Sprite"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.Sprite.WorldDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.Sprite"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.Sprite"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.Sprite"/> using a 1280*720 pixel base.</param>
+        </member>
+        <member name="M:GTA.UI.Sprite.WorldScaledDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.Sprite"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.Sprite"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.Sprite.WorldScaledDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.Sprite"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.Sprite"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.Sprite"/> using a <see cref="P:GTA.UI.Screen.ScaledWidth"/>*720 pixel base.</param>
+        </member>
         <member name="M:GTA.UI.TextElement.#ctor(System.String,System.Drawing.PointF,System.Single)">
             <summary>
             Initializes a new instance of the <see cref="T:GTA.UI.TextElement"/> class used for drawing text on the screen.
@@ -17505,6 +17609,32 @@
             Draws the <see cref="T:GTA.UI.TextElement" /> this frame at the specified offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth" />.
             </summary>
             <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.TextElement" /> using a <see cref="P:GTA.UI.Screen.ScaledWidth" />*720 pixel base.</param>
+        </member>
+        <member name="M:GTA.UI.TextElement.WorldDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.TextElement"/> this frame in the specified <see cref="T:GTA.Math.Vector3"/> position.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.TextElement"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.TextElement.WorldDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.TextElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.TextElement"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.TextElement"/> using a 1280*720 pixel base.</param>
+        </member>
+        <member name="M:GTA.UI.TextElement.WorldScaledDraw(GTA.Math.Vector3)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.TextElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.TextElement"/> to be drawn</param>
+        </member>
+        <member name="M:GTA.UI.TextElement.WorldScaledDraw(GTA.Math.Vector3,System.Drawing.SizeF)">
+            <summary>
+            Draws this <see cref="T:GTA.UI.TextElement"/> this frame at the specified <see cref="T:GTA.Math.Vector3"/> position and offset using the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth"/>.
+            </summary>
+            <param name="position">Position in the world where you want the <see cref="T:GTA.UI.TextElement"/> to be drawn</param>
+            <param name="offset">The offset to shift the draw position of this <see cref="T:GTA.UI.TextElement"/> using a <see cref="P:GTA.UI.Screen.ScaledWidth"/>*720 pixel base.</param>
         </member>
         <member name="T:GTA.AnimationBlendDelta">
             <summary>
@@ -20144,6 +20274,11 @@
         <member name="P:GTA.EntityBone.Position">
             <summary>
             Gets the position of this <see cref="T:GTA.EntityBone"/> in world coordinates.
+            </summary>
+        </member>
+        <member name="P:GTA.EntityBone.Rotation">
+            <summary>
+            Gets the  world rotation of this <see cref="T:GTA.EntityBone"/>.
             </summary>
         </member>
         <member name="P:GTA.EntityBone.RelativePosition">

@@ -1,21 +1,29 @@
 ﻿using GTA;
 using GTA.Math;
 using GTA.Native;
-using System;
-using System.Drawing;
 
 namespace Dismemberment
 {
     public static class Utils
     {
-        public static bool IsDLCinstalled()
+        public static void RequestPTFXLibrary(string lib)
         {
-            return Function.Call<bool>(Hash.IS_DLC_PRESENT, rage.atHashString.GetHashKey("dismemberment"));
+            if (!Function.Call<bool>(Hash.HAS_NAMED_PTFX_ASSET_LOADED, lib))
+            {
+                Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, lib);
+            }
+        }
+        public static void RemovePTFXLibrary(string lib)
+        {
+            if (Function.Call<bool>(Hash.HAS_NAMED_PTFX_ASSET_LOADED, lib))
+            {
+                Function.Call(Hash.REMOVE_NAMED_PTFX_ASSET, lib);
+            }
         }
 
-        public static int GetPedType(this Ped ped)
+        public static bool IsDLCInstalled()
         {
-            return Function.Call<int>(Hash.GET_PED_TYPE, ped);
+            return Function.Call<bool>(Hash.IS_DLC_PRESENT, rage.AtHashString.GetHashKey("dismemberment"));
         }
 
         public static int GetLastDamageBone(this Ped ped)

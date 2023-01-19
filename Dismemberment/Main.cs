@@ -6,28 +6,26 @@ using GTA;
 using GTA.UI;
 using GTA.Math;
 using GTA.Native;
+using System.Diagnostics;
 
 namespace Dismemberment
 {
     public class Main : Script
     {
-        [DllImport("DismembermentASI.asi", CharSet = CharSet.Auto)]
+        [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, EntryPoint = "AddBoneDraw", ExactSpelling = false)]
         private static extern void AddBoneDraw(int handle, int start, int end);
-
-        [DllImport("DismembermentASI.asi", CharSet = CharSet.Auto)]
-        private static extern void RemoveBoneDraw(int handle);
 
         public Main()
         {
-            if (Utils.IsDLCinstalled())
+            if (Utils.IsDLCInstalled())
             {
                 caps = new List<Prop>();
                 chunks = new List<Prop>();
                 rand = new Random();
                 Dismemberment.Settings.LoadSettings();
                 dismembermentWpns = File.ReadAllLines("scripts/DismembermentWeapons.cfg");
-                Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, "scr_solomon3");
-                Function.Call(Hash.REQUEST_NAMED_PTFX_ASSET, "scr_fbi1");
+                Utils.RequestPTFXLibrary("scr_solomon3");
+                Utils.RequestPTFXLibrary("scr_fbi1");
                 Tick += OnTick;
                 Aborted += OnAborted;
             }
@@ -52,17 +50,19 @@ namespace Dismemberment
             {
                 prop2.Delete();
             }
+            Utils.RemovePTFXLibrary("scr_solomon3");
+            Utils.RemovePTFXLibrary("scr_fbi1");
         }
-        // gotta figure out why ped.Bones.LastDamaged from SHVDN3 doesnt work here
+        // gotta figure out why ped.Bones.LastDamaged from SHVDN3 doesn't work here
         private void OnTick(object sender, EventArgs e)
         {
             foreach (Ped ped in World.GetNearbyPeds(Game.Player.Character, 150f))
             {
-                if (ped.GetLastDamageBone() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && ped.Exists() && ped.GetPedType() != 28)
+                if (ped.GetLastDamageBone() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && ped.Exists() && Function.Call<int>(Hash.GET_PED_TYPE, ped) != 28 && ped != Game.Player.Character)
                 {
                     foreach (string text in dismembermentWpns)
                     {
-                        if (ped.HasBeenDamagedBy((WeaponHash)rage.atHashString.GetHashKey(text)))
+                        if (ped.HasBeenDamagedBy((WeaponHash)rage.AtHashString.GetHashKey(text)))
                         {
                             Dismember(ped, ped.GetLastDamageBone(), -1);
                         }
@@ -136,7 +136,7 @@ namespace Dismemberment
                     }
                     else
                     {
-                        Prop prop = World.CreateProp("cap_head", ped.Position, false, false);
+                        var prop = World.CreateProp("cap_head", ped.Position, false, false);
                         prop.AttachTo(ped.Bones[Bone.SkelSpine3], new Vector3(0.294f, 0.01f, -0.025f), new Vector3(0f, -90f, 160f));
                         caps.Add(prop);
                     }
@@ -155,68 +155,68 @@ namespace Dismemberment
                 }
                 else if (start == 63931)
                 {
-                    Prop prop2 = World.CreateProp("cap_calf", ped.Position, false, false);
+                    var prop2 = World.CreateProp("cap_calf", ped.Position, false, false);
                     prop2.AttachTo(ped.Bones[Bone.SkelLeftThigh], new Vector3(0.25f, -0.03f, 0f), new Vector3(-40f, 90f, 0f));
                     caps.Add(prop2);
                 }
                 else if (start == 36864)
                 {
-                    Prop prop3 = World.CreateProp("cap_calf", ped.Position, false, false);
+                    var prop3 = World.CreateProp("cap_calf", ped.Position, false, false);
                     prop3.AttachTo(ped.Bones[Bone.SkelRightThigh], new Vector3(0.25f, -0.03f, 0f), new Vector3(-40f, 90f, 0f));
                     caps.Add(prop3);
                 }
                 else if (start == 58271)
                 {
-                    Prop prop4 = World.CreateProp("cap_calf", ped.Position, false, false);
+                    var prop4 = World.CreateProp("cap_calf", ped.Position, false, false);
                     prop4.AttachTo(ped.Bones[Bone.SkelLeftThigh], new Vector3(0.05f, 0f, 0f), new Vector3(0f, 90f, 0f));
                     caps.Add(prop4);
                 }
                 else if (start == 51826)
                 {
-                    Prop prop5 = World.CreateProp("cap_calf", ped.Position, false, false);
+                    var prop5 = World.CreateProp("cap_calf", ped.Position, false, false);
                     prop5.AttachTo(ped.Bones[Bone.SkelRightThigh], new Vector3(0.05f, 0f, 0f), new Vector3(0f, 90f, 0f));
                     caps.Add(prop5);
                 }
                 else if (start == 14201)
                 {
-                    Prop prop6 = World.CreateProp("cap_upperarm", ped.Position, false, false);
+                    var prop6 = World.CreateProp("cap_upperarm", ped.Position, false, false);
                     prop6.AttachTo(ped.Bones[Bone.SkelLeftCalf], new Vector3(0.3f, 0.01f, 0f), new Vector3(120f, 20f, 90f));
                     caps.Add(prop6);
                 }
                 else if (start == 52301)
                 {
-                    Prop prop7 = World.CreateProp("cap_upperarm", ped.Position, false, false);
+                    var prop7 = World.CreateProp("cap_upperarm", ped.Position, false, false);
                     prop7.AttachTo(ped.Bones[Bone.SkelRightCalf], new Vector3(0.3f, 0.01f, 0f), new Vector3(120f, 20f, 90f));
                     caps.Add(prop7);
                 }
                 else if (start == 45509 || start == 64729 || start == 61163)
                 {
-                    Prop prop8 = World.CreateProp("cap_shoulder", ped.Position, false, false);
+                    var prop8 = World.CreateProp("cap_shoulder", ped.Position, false, false);
                     prop8.AttachTo(ped.Bones[Bone.SkelSpine3], new Vector3(0.2f, -0.03f, 0.15f), new Vector3(-170f, -180f, -50f));
                     caps.Add(prop8);
                 }
                 else if (start == 40269 || start == 10706 || start == 28252)
                 {
-                    Prop prop9 = World.CreateProp("cap_shoulder", ped.Position, false, false);
+                    var prop9 = World.CreateProp("cap_shoulder", ped.Position, false, false);
                     prop9.AttachTo(ped.Bones[Bone.SkelSpine3], new Vector3(0.18f, -0.03f, -0.15f), new Vector3(0f, 180f, 0f));
                     caps.Add(prop9);
                 }
                 else if (start == 18905)
                 {
-                    Prop prop10 = World.CreateProp("cap_shoulder", ped.Position, false, false);
+                    var prop10 = World.CreateProp("cap_shoulder", ped.Position, false, false);
                     prop10.AttachTo(ped.Bones[Bone.SkelLeftUpperArm], new Vector3(0.3f, 0.02f, 0.04f), new Vector3(0f, 80f, 0f));
                     caps.Add(prop10);
                 }
                 else if (start == 57005)
                 {
-                    Prop prop11 = World.CreateProp("cap_shoulder", ped.Position, false, false);
+                    var prop11 = World.CreateProp("cap_shoulder", ped.Position, false, false);
                     prop11.AttachTo(ped.Bones[Bone.SkelRightUpperArm], new Vector3(0.3f, 0.02f, 0.04f), new Vector3(0f, 80f, 0f));
                     caps.Add(prop11);
                 }
                 int num = rand.Next(5, 21);
                 for (int i = 0; i < num; i++)
                 {
-                    Prop prop12 = World.CreateProp("p_brain_chunk_s", ped.Bones[(Bone)start].Position, false, false);
+                    var prop12 = World.CreateProp("p_brain_chunk_s", ped.Bones[(Bone)start].Position, ped.Bones[(Bone)start].Rotation ,false, false);
                     chunks.Add(prop12);
                 }
                 chunkTimer = Game.GameTime + 2000;

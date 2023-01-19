@@ -17,12 +17,21 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="joaat.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ScriptHookVDotNet3">
