@@ -23,7 +23,7 @@ namespace Dismemberment
 
         public static bool IsDLCInstalled()
         {
-            return Function.Call<bool>(Hash.IS_DLC_PRESENT, rage.AtHashString.GetHashKey("dismemberment"));
+            return Function.Call<bool>(Hash.IS_DLC_PRESENT, Game.GenerateHash("dismemberment"));
         }
 
         public static int GetLastDamageBone(this Ped ped)

@@ -6,16 +6,15 @@ using GTA;
 using GTA.UI;
 using GTA.Math;
 using GTA.Native;
-using System.Diagnostics;
 
 namespace Dismemberment
 {
-    public class Main : Script
+    public class DismembermentMain : Script
     {
         [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, EntryPoint = "AddBoneDraw", ExactSpelling = false)]
         private static extern void AddBoneDraw(int handle, int start, int end);
 
-        public Main()
+        public DismembermentMain()
         {
             if (Utils.IsDLCInstalled())
             {
@@ -58,11 +57,11 @@ namespace Dismemberment
         {
             foreach (Ped ped in World.GetNearbyPeds(Game.Player.Character, 150f))
             {
-                if (ped.GetLastDamageBone() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && ped.Exists() && Function.Call<int>(Hash.GET_PED_TYPE, ped) != 28 && ped != Game.Player.Character)
+                if (ped.GetLastDamageBone() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && Function.Call<int>(Hash.GET_PED_TYPE, ped) != 28 && ped != Game.Player.Character)
                 {
                     foreach (string text in dismembermentWpns)
                     {
-                        if (ped.HasBeenDamagedBy((WeaponHash)rage.AtHashString.GetHashKey(text)))
+                        if (ped.HasBeenDamagedBy((WeaponHash)Game.GenerateHash(text)))
                         {
                             Dismember(ped, ped.GetLastDamageBone(), -1);
                         }
