@@ -11,7 +11,7 @@ namespace Dismemberment
 {
     public class DismembermentMain : Script
     {
-        [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, EntryPoint = "AddBoneDraw", ExactSpelling = false)]
+        [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, EntryPoint = "AddBoneDraw", ExactSpelling = true)]
         private static extern void AddBoneDraw(int handle, int start, int end);
 
         public DismembermentMain()
