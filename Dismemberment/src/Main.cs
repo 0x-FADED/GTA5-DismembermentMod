@@ -7,7 +7,7 @@ using GTA.UI;
 using GTA.Math;
 using GTA.Native;
 
-namespace Dismemberment
+namespace Dismemberment.src
 {
     public class DismembermentMain : Script
     {
@@ -21,7 +21,7 @@ namespace Dismemberment
                 caps = new List<Prop>();
                 chunks = new List<Prop>();
                 rand = new Random();
-                Dismemberment.Settings.LoadSettings();
+                src.Settings.LoadSettings();
                 dismembermentWpns = File.ReadAllLines("scripts/DismembermentWeapons.cfg");
                 Utils.RequestPTFXLibrary("scr_solomon3");
                 Utils.RequestPTFXLibrary("scr_fbi1");
@@ -31,13 +31,13 @@ namespace Dismemberment
             else
             {
                 Screen.ShowHelpText("~b~dismemberment.rpf ~r~not found! ~w~please re-install the mod correctly", -1, false, true);
-                Notification.Show("~b~dismemberment.rpf ~r~not found! ~w~please re-install the mod correctly",false);
+                Notification.Show("~b~dismemberment.rpf ~r~not found! ~w~please re-install the mod correctly", false);
             }
         }
 
         private void OnAborted(object sender, EventArgs e)
         {
-            if(Screen.IsHelpTextDisplayed)
+            if (Screen.IsHelpTextDisplayed)
             {
                 Screen.ClearHelpText();
             }
@@ -108,7 +108,7 @@ namespace Dismemberment
             {
                 return;
             }
-            if (Dismemberment.Settings.dismemberTorso || (start != 57597 && start != 23553 && start != 24816 && start != 24817 && start != 24818))
+            if (src.Settings.dismemberTorso || start != 57597 && start != 23553 && start != 24816 && start != 24817 && start != 24818)
             {
                 ped.IsPersistent = true;
                 if (ped.IsAlive || !ped.IsRagdoll)
@@ -140,7 +140,7 @@ namespace Dismemberment
                         caps.Add(prop);
                     }
                 }
-                else if (Dismemberment.Settings.dismemberTorso && (start == 57597 || start == 23553 || start == 24816 || start == 24817 || start == 24818))
+                else if (src.Settings.dismemberTorso && (start == 57597 || start == 23553 || start == 24816 || start == 24817 || start == 24818))
                 {
                     Function.Call(Hash.KNOCK_OFF_PED_PROP, ped, 0, 1, 1, 1);
                     Function.Call(Hash.KNOCK_OFF_PED_PROP, ped, 1, 1, 1, 1);
@@ -215,11 +215,11 @@ namespace Dismemberment
                 int num = rand.Next(5, 21);
                 for (int i = 0; i < num; i++)
                 {
-                    var prop12 = World.CreateProp("p_brain_chunk_s", ped.Bones[(Bone)start].Position, ped.Bones[(Bone)start].Rotation ,false, false);
+                    var prop12 = World.CreateProp("p_brain_chunk_s", ped.Bones[(Bone)start].Position, ped.Bones[(Bone)start].Rotation, false, false);
                     chunks.Add(prop12);
                 }
                 chunkTimer = Game.GameTime + 2000;
-                if (start != 31086 && start != 39317 && Dismemberment.Settings.pedPainSound)
+                if (start != 31086 && start != 39317 && src.Settings.pedPainSound)
                 {
                     Function.Call(Hash.STOP_CURRENT_PLAYING_SPEECH, ped);
                     Function.Call(Hash.PLAY_AMBIENT_SPEECH_FROM_POSITION_NATIVE,

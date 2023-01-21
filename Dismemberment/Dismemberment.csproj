@@ -7,7 +7,7 @@
     <AssemblyName>Dismemberment</AssemblyName>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <FileAlignment>512</FileAlignment>
-    <TargetFramework>net481</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <UseWindowsForms>True</UseWindowsForms>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
@@ -24,10 +24,10 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
+    <Compile Include="src\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="src\Settings.cs" />
+    <Compile Include="src\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Reflection" Version="4.3.0" />
