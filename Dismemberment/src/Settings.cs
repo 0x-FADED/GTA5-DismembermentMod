@@ -1,8 +1,8 @@
 ﻿using GTA;
 
-namespace Dismemberment.src
+namespace Dismemberment
 {
-    public static class Settings
+    public static class ModSettings
     {
         public static void LoadSettings()
         {

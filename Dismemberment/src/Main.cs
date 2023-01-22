@@ -7,7 +7,7 @@ using GTA.UI;
 using GTA.Math;
 using GTA.Native;
 
-namespace Dismemberment.src
+namespace Dismemberment
 {
     public class DismembermentMain : Script
     {
@@ -21,7 +21,7 @@ namespace Dismemberment.src
                 caps = new List<Prop>();
                 chunks = new List<Prop>();
                 rand = new Random();
-                src.Settings.LoadSettings();
+                ModSettings.LoadSettings();
                 dismembermentWpns = File.ReadAllLines("scripts/DismembermentWeapons.cfg");
                 Utils.RequestPTFXLibrary("scr_solomon3");
                 Utils.RequestPTFXLibrary("scr_fbi1");
@@ -108,7 +108,7 @@ namespace Dismemberment.src
             {
                 return;
             }
-            if (src.Settings.dismemberTorso || start != 57597 && start != 23553 && start != 24816 && start != 24817 && start != 24818)
+            if (ModSettings.dismemberTorso || start != 57597 && start != 23553 && start != 24816 && start != 24817 && start != 24818)
             {
                 ped.IsPersistent = true;
                 if (ped.IsAlive || !ped.IsRagdoll)
@@ -140,7 +140,7 @@ namespace Dismemberment.src
                         caps.Add(prop);
                     }
                 }
-                else if (src.Settings.dismemberTorso && (start == 57597 || start == 23553 || start == 24816 || start == 24817 || start == 24818))
+                else if (ModSettings.dismemberTorso && (start == 57597 || start == 23553 || start == 24816 || start == 24817 || start == 24818))
                 {
                     Function.Call(Hash.KNOCK_OFF_PED_PROP, ped, 0, 1, 1, 1);
                     Function.Call(Hash.KNOCK_OFF_PED_PROP, ped, 1, 1, 1, 1);
@@ -219,7 +219,7 @@ namespace Dismemberment.src
                     chunks.Add(prop12);
                 }
                 chunkTimer = Game.GameTime + 2000;
-                if (start != 31086 && start != 39317 && src.Settings.pedPainSound)
+                if (start != 31086 && start != 39317 && ModSettings.pedPainSound)
                 {
                     Function.Call(Hash.STOP_CURRENT_PLAYING_SPEECH, ped);
                     Function.Call(Hash.PLAY_AMBIENT_SPEECH_FROM_POSITION_NATIVE,

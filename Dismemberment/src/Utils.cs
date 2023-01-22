@@ -2,7 +2,7 @@
 using GTA.Math;
 using GTA.Native;
 
-namespace Dismemberment.src
+namespace Dismemberment
 {
     public static class Utils
     {
