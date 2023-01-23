@@ -1,6 +1,7 @@
 ﻿using GTA;
 using GTA.Math;
 using GTA.Native;
+using System.Xml.Schema;
 
 namespace Dismemberment
 {
@@ -24,13 +25,6 @@ namespace Dismemberment
         public static bool IsDLCInstalled()
         {
             return Function.Call<bool>(Hash.IS_DLC_PRESENT, Game.GenerateHash("dismemberment"));
-        }
-
-        public static int GetLastDamageBone(this Ped ped)
-        {
-            var outputArgument = new OutputArgument();
-            Function.Call<int>(Hash.GET_PED_LAST_DAMAGE_BONE, ped, outputArgument);
-            return outputArgument.GetResult<int>();
         }
 
         public static Ped CloneMe(this Ped ped, Vector3 coords, float heading)

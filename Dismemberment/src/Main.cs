@@ -52,18 +52,18 @@ namespace Dismemberment
             Utils.RemovePTFXLibrary("scr_solomon3");
             Utils.RemovePTFXLibrary("scr_fbi1");
         }
-        // gotta figure out why ped.Bones.LastDamaged from SHVDN3 doesn't work here
+
         private void OnTick(object sender, EventArgs e)
         {
             foreach (Ped ped in World.GetNearbyPeds(Game.Player.Character, 150f))
             {
-                if (ped.GetLastDamageBone() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && Function.Call<int>(Hash.GET_PED_TYPE, ped) != 28 && ped != Game.Player.Character)
+                if (ped.Bones.LastDamaged != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && Function.Call<int>(Hash.GET_PED_TYPE, ped) != 28 && ped != Game.Player.Character)
                 {
                     foreach (string text in dismembermentWpns)
                     {
                         if (ped.HasBeenDamagedBy((WeaponHash)Game.GenerateHash(text)))
                         {
-                            Dismember(ped, ped.GetLastDamageBone(), -1);
+                            Dismember(ped, ped.Bones.LastDamaged, -1);
                         }
                     }
                     ped.ClearLastWeaponDamage();
