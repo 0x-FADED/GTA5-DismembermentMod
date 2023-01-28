@@ -30,9 +30,6 @@
     <Compile Include="src\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="ScriptHookVDotNet3">
       <HintPath>SHVDN\ScriptHookVDotNet3.dll</HintPath>
     </Reference>

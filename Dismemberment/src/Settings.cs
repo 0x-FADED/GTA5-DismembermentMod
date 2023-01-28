@@ -2,9 +2,9 @@
 
 namespace Dismemberment
 {
-    public static class ModSettings
+    internal static class ModSettings
     {
-        public static void LoadSettings()
+        internal static void LoadSettings()
         {
             toml = ScriptSettings.Load("scripts\\Dismemberment.toml");
             dismemberTorso = toml.GetValue("Settings", "bDismemberTorso", true);
@@ -13,8 +13,8 @@ namespace Dismemberment
 
         private static ScriptSettings toml;
 
-        public static bool dismemberTorso;
+        internal static bool dismemberTorso;
 
-        public static bool pedPainSound;
+        internal static bool pedPainSound;
     }
 }

@@ -9,10 +9,13 @@ using GTA.Native;
 
 namespace Dismemberment
 {
-    public class DismembermentMain : Script
+    internal class DismembermentMain : Script
     {
-        [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto, EntryPoint = "AddBoneDraw", ExactSpelling = true)]
+        [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void AddBoneDraw(int handle, int start, int end);
+
+        [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        private static extern void RemoveBoneDraw(int handle);
 
         public DismembermentMain()
         {
@@ -37,6 +40,11 @@ namespace Dismemberment
 
         private void OnAborted(object sender, EventArgs e)
         {
+            foreach (Ped ped in World.GetAllPeds())
+            {
+                //we don't need to have sanity check here. the DismembermentASI.asi manages this and this only applies to the peds which went through AddBoneDraw
+                RemoveBoneDraw(ped.Handle);
+            }
             if (Screen.IsHelpTextDisplayed)
             {
                 Screen.ClearHelpText();
@@ -57,13 +65,13 @@ namespace Dismemberment
         {
             foreach (Ped ped in World.GetNearbyPeds(Game.Player.Character, 150f))
             {
-                if (ped.Bones.LastDamaged != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && Function.Call<int>(Hash.GET_PED_TYPE, ped) != 28 && ped != Game.Player.Character)
+                if (ped != null && ped.Exists() && ped.GetPedLastBoneDamage() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && ped.ExcludedPeds() != true && ped != Game.Player.Character)
                 {
                     foreach (string text in dismembermentWpns)
                     {
                         if (ped.HasBeenDamagedBy((WeaponHash)Game.GenerateHash(text)))
                         {
-                            Dismember(ped, ped.Bones.LastDamaged, -1);
+                            Dismember(ped, ped.GetPedLastBoneDamage(), -1);
                         }
                     }
                     ped.ClearLastWeaponDamage();
