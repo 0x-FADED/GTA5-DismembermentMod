@@ -17324,6 +17324,14 @@
             If ScaledDraw is called, the position will be scaled by the width returned in <see cref="P:GTA.UI.Screen.ScaledWidth" />.
             </remarks>
         </member>
+        <member name="P:GTA.UI.Sprite.TextureCoordinates">
+            <summary>
+            Gets or sets the texture coordinates of this <see cref="T:GTA.UI.Sprite" />.
+            </summary>
+            <value>
+            The texture coordinates allows to specify the coordinates (measured in percentage: 1f = 100%), used to draw the sprite.
+            </value>
+        </member>
         <member name="P:GTA.UI.Sprite.Size">
             <summary>
             Gets or sets the size to draw the <see cref="T:GTA.UI.Sprite" />
@@ -17639,7 +17647,7 @@
         <member name="T:GTA.AnimationBlendDelta">
             <summary>
             Represents an animation blend delta that determines the rate at which the animation task will blend in or out.
-            The blend in duration is <c>1.0f / (the blend delta value)</c>.
+            The blend duration in seconds is equal to <c>1.0f / (the blend delta value)</c>.
             </summary>
         </member>
         <member name="P:GTA.AnimationBlendDelta.Walk">
@@ -19191,6 +19199,11 @@
             <param name="right">The right <see cref="T:GTA.Building"/>.</param>
             <returns><see langword="true" /> if <paramref name="left"/> is not the same entity as <paramref name="right"/>; otherwise, <see langword="false" />.</returns>
         </member>
+        <member name="T:GTA.RagdollComponent">
+            <summary>
+            The ragdoll component enum, which is used for apply force natives and some config files such as <c>physicstasks.ymt</c>.
+            </summary>
+        </member>
         <member name="F:GTA.AnimationIKControlFlags.None">
             <summary>
             No Ik control during the task.
@@ -20179,7 +20192,7 @@
             Applies a force to this <see cref="T:GTA.Entity"/>.
             </summary>
             <param name="direction">The direction to apply the force relative to world coordinates.</param>
-            <param name="rotation">The offset from the root bone of this <see cref="T:GTA.Entity"/> where the force applies. "rotation" is incorrectly named parameter but is left for scripts that use the method with named parameters.</param>
+            <param name="rotation">The offset from the root component of this <see cref="T:GTA.Entity"/> where the force applies. "rotation" is incorrectly named parameter but is left for scripts that use the method with named parameters.</param>
             <param name="forceType">Type of the force to apply.</param>
         </member>
         <member name="M:GTA.Entity.ApplyForceRelative(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType)">
@@ -20187,8 +20200,99 @@
             Applies a force to this <see cref="T:GTA.Entity"/>.
             </summary>
             <param name="direction">The direction to apply the force relative to this <see cref="T:GTA.Entity"/>s rotation</param>
-            <param name="rotation">The offset from the root bone of this <see cref="T:GTA.Entity"/> where the force applies. "rotation" is incorrectly named parameter but is left for scripts that use the method with named parameters.</param>
+            <param name="rotation">The offset from the root component of this <see cref="T:GTA.Entity"/> where the force applies. "rotation" is incorrectly named parameter but is left for scripts that use the method with named parameters.</param>
             <param name="forceType">Type of the force to apply.</param>
+        </member>
+        <member name="M:GTA.Entity.ApplyWorldForceWorldOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a world force to this <see cref="T:GTA.Entity"/> using world offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Entity.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Entity.ApplyWorldForceRelativeOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a world force to this <see cref="T:GTA.Entity"/> using relative offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Entity.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Entity.ApplyRelativeForceWorldOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a relative force to this <see cref="T:GTA.Entity"/> using world offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Entity.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Entity.ApplyRelativeForceRelativeOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a relative force to this <see cref="T:GTA.Entity"/> using relative offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Entity.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Entity.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a force to this <see cref="T:GTA.Entity"/>.
+            </summary>
+            <param name="force">The force to be applied.</param>
+            <param name="offset">The offset from center of entity at which to apply force.</param>
+            <param name="forceType">Type of the force to apply.</param>
+            <param name="relativeForce">
+            Specifies whether the force vector passed in is in relative or world coordinates.
+            Rocal coordinates (<see langword="true"/>) means the force will get automatically transformed into world space before being applied.
+            </param>
+            <param name="relativeOffset">Specifies whether the offset passed in is in relative or world coordinates.</param>
+            <param name="scaleByMass">
+            <para>Specifies whether to scale the force by mass.</para>
+            <para>If <see langword="true"/>, force will be multiplied by mass. For example, force passed in is in fact an acceleration rate in <c>m/s*s</c> (force) or velocity change in <c>m/s</c> (impulse).</para>
+            <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (impulse).</para>
+            <para>
+            In other words, scaling by mass is probably easier in most situations -
+            if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precise).
+            </para>
+            </param>
+            <param name="triggerAudio">
+            <para>Specifies whether to play audio events related to the force being applied. The sound will play only if the entity type is <see cref="T:GTA.Vehicle"/> and will play a suspension squeal depending on the magnitude of the force.</para>
+            <para>The sound will play even if regardless of <see cref="T:GTA.ForceType"/> (even with a value other than between 0 to 5).</para>
+            </param>
+            <param name="scaleByTimeScale">
+            <para>Specifies whether scale the force by the current time scale (max: <c>1.0f</c>).</para>
+            <para>Only affects when <paramref name="forceType"/> is <see cref="F:GTA.ForceType.InternalImpulse"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.</para>
+            </param>
+        </member>
+        <member name="M:GTA.Entity.ApplyWorldForceCenterOfMass(GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a world force to the center of mass of this <see cref="T:GTA.Entity"/>.
+            <paramref name="forceType"/> must not be <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.
+            </summary>
+            <inheritdoc cref="M:GTA.Entity.ApplyForceCenterOfMassInternal(GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Entity.ApplyRelativeForceCenterOfMass(GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a relative force to the center of mass of this <see cref="T:GTA.Entity"/>.
+            <paramref name="forceType"/> must not be <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.
+            </summary>
+            <inheritdoc cref="M:GTA.Entity.ApplyForceCenterOfMassInternal(GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Entity.ApplyForceCenterOfMassInternal(GTA.Math.Vector3,GTA.ForceType,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a force to the center of mass of this <see cref="T:GTA.Entity"/>.
+            <paramref name="forceType"/> must not be <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.
+            </summary>
+            <param name="force">The force to be applied.</param>
+            <param name="forceType">Type of the force to apply.</param>
+            <param name="relativeForce">
+            Specifies whether the force vector passed in is in relative or world coordinates.
+            Relative coordinates (<see langword="true"/>) means the force will get automatically transformed into world space before being applied.
+            </param>
+            <param name="scaleByMass">
+            <para>Specifies whether to scale the force by mass.</para>
+            <para>If <see langword="true"/>, force will be multiplied by mass. For example, force passed in is in fact an acceleration rate in <c>m/s*s</c> (force) or velocity change in <c>m/s</c> (impulse).</para>
+            <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (impulse).</para>
+            <para>
+            In other words, scaling by mass is probably easier in most situations -
+            if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precise).
+            </para>
+            </param>
+            <param name="applyToChildren">Specifies whether to apply force to children components as well as the speficied component.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="forceType"/> is set to <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>, which is not supported by this method.</exception>
         </member>
         <member name="M:GTA.Entity.MarkAsNoLongerNeeded">
             <summary>
@@ -20246,10 +20350,38 @@
             Gets the bone index of this <see cref="T:GTA.EntityBone"/>.
             </summary>
         </member>
+        <member name="P:GTA.EntityBone.Tag">
+            <summary>
+            Gets the bone tag (identifier) of this <see cref="T:GTA.EntityBone"/>.
+            If the bone does not exist, <c>-1</c> will be returned.
+            </summary>
+        </member>
         <member name="P:GTA.EntityBone.Owner">
             <summary>
             Gets the owner <see cref="T:GTA.Entity"/> this bone belongs to.
             </summary>
+        </member>
+        <member name="P:GTA.EntityBone.NextSibling">
+            <summary>
+            Gets the next sibling bone of this <see cref="T:GTA.EntityBone"/>.
+            To check existence of the next sibling bone, you can use <see cref="P:GTA.EntityBone.Index"/> or <see cref="P:GTA.EntityBone.Tag"/>.
+            </summary>
+        </member>
+        <member name="P:GTA.EntityBone.Parent">
+            <summary>
+            Gets the parent bone of this <see cref="T:GTA.EntityBone"/>.
+            To check existence of the next sibling bone, you can use <see cref="P:GTA.EntityBone.Index"/> or <see cref="P:GTA.EntityBone.Tag"/>.
+            </summary>
+        </member>
+        <member name="P:GTA.EntityBone.Name">
+            <summary>
+            Gets the bone name of this <see cref="T:GTA.EntityBone"/>.
+            If the bone does not exist, <see langword="null"/> will be returned.
+            </summary>
+            <remarks>
+            This property return the bone name as registered in the yft file of corresponding model, but the hashed value of this string value may not match <see cref="P:GTA.EntityBone.Tag"/>.
+            For example, <see cref="T:GTA.Ped"/>s have the bone in their skeletons whose name is <c>SKEL_Spine3</c> and whose ID is <c>24818</c>, which doesn't match the hashed value of <c>SKEL_Spine3</c> but matches that of <c>BONETAG_SPINE3</c>.
+            </remarks>
         </member>
         <member name="P:GTA.EntityBone.IsValid">
             <summary>
@@ -20284,6 +20416,11 @@
         <member name="P:GTA.EntityBone.RelativePosition">
             <summary>
             Gets the position of this <see cref="T:GTA.EntityBone"/> relative to the <see cref="T:GTA.Entity"/> its part of.
+            </summary>
+        </member>
+        <member name="P:GTA.EntityBone.RelativeRotation">
+            <summary>
+            Gets the rotation of this <see cref="T:GTA.EntityBone"/> relative to the <see cref="T:GTA.Entity"/> its part of.
             </summary>
         </member>
         <member name="P:GTA.EntityBone.UpVector">
@@ -20402,9 +20539,21 @@
         </member>
         <member name="P:GTA.EntityBoneCollection.Item(System.String)">
             <summary>
+            <para>
             Gets the <see cref="T:GTA.EntityBone"/> with the specified bone name.
+            If the corresponding bone is not found, the <see cref="P:GTA.EntityBone.Index"/> of the returned instance will return <c>-1</c>.
+            To access to the chassis bone of <see cref="T:GTA.Vehicle"/>, use <see cref="P:GTA.EntityBoneCollection.Item(System.Int32)"/> with the index <c>0</c> as the chassis bone index and ID will always be <c>0</c> (hardcoded to the exe).
+            </para>
+            <para>
+            This method will try to find the corresponding bone by the hash calcutated with <c>(ElfHashUppercased(string) % 0xFE8F + 0x170)</c>,
+            where <c>ElfHashUppercased(string)</c> will convert ASCII lowercase characters to uppercase ones before hashing characters.
+            </para>
             </summary>
             <param name="boneName">Name of the bone.</param>
+            <remarks>
+            Registered bone tag values (in the model) may be different from the calculated hashes from corresponding bone names.
+            For example, <see cref="T:GTA.Ped"/>s have the bone in their skeletons whose name is <c>SKEL_Spine3</c> and whose ID is <c>24818</c>, which doesn't match the hashed value of <c>SKEL_Spine3</c> but matches that of <c>BONETAG_SPINE3</c>.
+            </remarks>
         </member>
         <member name="P:GTA.EntityBoneCollection.Count">
             <summary>
@@ -21021,6 +21170,11 @@
             so that the game doesn't correct errors (special case such as scrip-side implemented AI tasks, i.e. diving)
             </summary>
         </member>
+        <member name="F:GTA.Bone.Invalid">
+            <summary>
+            The correspoinding bone tag value for <c>BONETAG_INVALID</c>, which is used in some meta/xml files such as weapon meta files and <c>damages.meta</c>.
+            </summary>
+        </member>
         <member name="T:GTA.EnterVehicleFlags">
             <summary>
             Set of flags to define the behaviour of the enter and exit vehicle tasks.
@@ -21546,11 +21700,125 @@
             Sets the animation dictionary or set this <see cref="T:GTA.Ped"/> should use or <see langword="null" /> to clear it.
             </summary>
         </member>
+        <member name="M:GTA.Ped.ApplyWorldForceWorldOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a world force to this <see cref="T:GTA.Entity"/> using world offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Ped.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Ped.ApplyWorldForceRelativeOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a world force to this <see cref="T:GTA.Entity"/> using relative offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Ped.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Ped.ApplyRelativeForceWorldOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a relative force to this <see cref="T:GTA.Entity"/> using world offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Ped.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Ped.ApplyRelativeForceRelativeOffset(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a relative force to this <see cref="T:GTA.Entity"/> using relative offset.
+            </summary>
+            <inheritdoc cref="M:GTA.Ped.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Ped.ApplyForceInternal(GTA.Math.Vector3,GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a force to this <see cref="T:GTA.Entity"/>.
+            </summary>
+            <param name="force">The force to be applied.</param>
+            <param name="offset">The offset from center of entity at which to apply force.</param>
+            <param name="forceType">Type of the force to apply.</param>
+            <param name="component">Component of the entity to apply the force.</param>
+            <param name="relativeForce">
+            Specifies whether the force vector passed in is in relative or world coordinates.
+            Relative coordinates (<see langword="true"/>) means the force will get automatically transformed into world space before being applied.
+            </param>
+            <param name="relativeOffset">Specifies whether the offset passed in is in relative or world coordinates.</param>
+            <param name="scaleByMass">
+            <para>Specifies whether to scale the force by mass.</para>
+            <para>If <see langword="true"/>, force will be multiplied by mass. For example, force passed in is in fact an acceleration rate in <c>m/s*s</c> (force) or velocity change in <c>m/s</c> (impulse).</para>
+            <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (impulse).</para>
+            <para>
+            In other words, scaling by mass is probably easier in most situations -
+            if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precise).
+            </para>
+            </param>
+            <param name="triggerAudio">
+            <para>Specifies whether to play audio events related to the force being applied. The sound will play only if the entity type is <see cref="T:GTA.Vehicle"/> and will play a suspension squeal depending on the magnitude of the force.</para>
+            <para>The sound will play even if regardless of <see cref="T:GTA.ForceType"/> (even with a value other than between 0 to 5).</para>
+            </param>
+            <param name="scaleByTimeScale">
+            <para>Specifies whether scale the force by the current time scale (max: <c>1.0f</c>).</para>
+            <para>Only affects when <paramref name="forceType"/> is <see cref="F:GTA.ForceType.InternalImpulse"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.</para>
+            </param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="component"/> not a value defined in <see cref="T:GTA.RagdollComponent"/>.</exception>
+        </member>
+        <member name="M:GTA.Ped.ApplyWorldForceCenterOfMass(GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a world force to the center of mass of this <see cref="T:GTA.Entity"/>.
+            <paramref name="forceType"/> must not be <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.
+            </summary>
+            <inheritdoc cref="M:GTA.Ped.ApplyForceCenterOfMassInternal(GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Ped.ApplyRelativeForceCenterOfMass(GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a relative force to the center of mass of this <see cref="T:GTA.Entity"/>.
+            <paramref name="forceType"/> must not be <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.
+            </summary>
+            <inheritdoc cref="M:GTA.Ped.ApplyForceCenterOfMassInternal(GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean)"/>
+        </member>
+        <member name="M:GTA.Ped.ApplyForceCenterOfMassInternal(GTA.Math.Vector3,GTA.ForceType,GTA.RagdollComponent,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Applies a force to the center of mass of this <see cref="T:GTA.Entity"/>.
+            <paramref name="forceType"/> must not be <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>.
+            </summary>
+            <param name="force">The force to be applied.</param>
+            <param name="forceType">Type of the force to apply.</param>
+            <param name="component">Component of the entity to apply the force.</param>
+            <param name="relativeForce">
+            Specifies whether the force vector passed in is in relative or world coordinates.
+            Relative coordinates (<see langword="true"/>) means the force will get automatically transformed into world space before being applied.
+            </param>
+            <param name="scaleByMass">
+            <para>Specifies whether to scale the force by mass.</para>
+            <para>If <see langword="true"/>, force will be multiplied by mass. For example, force passed in is in fact an acceleration rate in <c>m/s*s</c> (force) or velocity change in <c>m/s</c> (impulse).</para>
+            <para>If <see langword="false"/>, force will be applied directly and it's effect will depend on the mass of the entity. For example, force passed in is a proper force in Newtons (force) or a step change in momentum <c>kg*m/s</c> (impulse).</para>
+            <para>
+            In other words, scaling by mass is probably easier in most situations -
+            if the mass of the object changes it's behaviour shouldn't, and it's easier to picture the effect because an acceleration rate of <c>10.0</c> is approximately the same as gravity (<c>9.81</c> to be more precise).
+            </para>
+            </param>
+            <param name="applyToChildren">Specifies whether to apply force to children components as well as the speficied component.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="forceType"/> is set to <see cref="F:GTA.ForceType.ExternalForce"/> or <see cref="F:GTA.ForceType.ExternalImpulse"/>, which is not supported by this method.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="component"/> not a value defined in <see cref="T:GTA.RagdollComponent"/>.</exception>
+        </member>
         <member name="M:GTA.Ped.GetAllLoadedModelsAppropriateForAmbientPeds">
             <summary>
             Gets an <c>array</c> of all loaded <see cref="T:GTA.PedHash"/>s that is appropriate to spawn as ambient vehicles.
             The result array can contains animal hashes, which CREATE_RANDOM_PED excludes to spawn.
             All the model hashes of the elements are loaded and the <see cref="T:GTA.Ped"/>s with the model hashes can be spawned immediately.
+            </summary>
+        </member>
+        <member name="P:GTA.PedBone.Tag">
+            <summary>
+            Gets the bone tag (identifier) of this <see cref="T:GTA.PedBone"/>.
+            Will return the same value as <see cref="P:GTA.EntityBone.Tag"/> but the returned type is <see cref="T:GTA.Bone"/>.
+            If the bone does not exist, <see cref="F:GTA.Bone.Invalid"/> will be returned.
+            </summary>
+        </member>
+        <member name="P:GTA.PedBone.NextSibling">
+            <summary>
+            Gets the sibling bone of this <see cref="T:GTA.PedBone"/>.
+            To check existence of the next sibling bone, you can use <see cref="P:GTA.EntityBone.Index"/> or <see cref="P:GTA.PedBone.Tag"/>.
+            </summary>
+        </member>
+        <member name="P:GTA.PedBone.Parent">
+            <summary>
+            Gets the parent bone of this <see cref="T:GTA.PedBone"/>.
+            To check existence of the next sibling bone, you can use <see cref="P:GTA.EntityBone.Index"/> or <see cref="P:GTA.PedBone.Tag"/>.
             </summary>
         </member>
         <member name="P:GTA.PedBoneCollection.Item(GTA.Bone)">
@@ -21567,9 +21835,21 @@
         </member>
         <member name="P:GTA.PedBoneCollection.Item(System.String)">
             <summary>
-            Gets the <see cref="T:GTA.PedBone"/> with the specified bone name.
+            <para>
+            Gets the <see cref="T:GTA.PedBone"/> with the specified bone name. Use this overload only if you know a correct bone tag.
+            If the corresponding bone is not found, the <see cref="P:GTA.EntityBone.Index"/> of the returned instance will return <c>-1</c>.
+            </para>
+            <para>
+            This method will try to find the corresponding bone by the hash calcutated with <c>(ElfHashUppercased(string) % 0xFE8F + 0x170)</c>,
+            where <c>ElfHashUppercased(string)</c> will convert ASCII lowercase characters to uppercase ones before hashing characters.
+            </para>
             </summary>
             <param name="boneName">Name of the bone.</param>
+            <remarks>
+            Registered bone tag values (in the model) may be different from the calculated hashes from corresponding bone names.
+            For example, <see cref="T:GTA.Ped"/>s have the bones in their skeletons whose name is <c>SKEL_Spine3</c> and whose ID is <c>24818</c>, which doesn't match the hashed value of <c>SKEL_Spine3</c> but matches that of <c>BONETAG_SPINE3</c>.
+            On the other hand, <see cref="T:GTA.Ped"/>s have the bone in their skeletons whose name is <c>IK_Head</c> and whose ID is <c>12844</c>, which matches the hashed value of <c>IK_Head</c>.
+            </remarks>
         </member>
         <member name="P:GTA.PedBoneCollection.Core">
             <summary>
@@ -23066,6 +23346,48 @@
         <member name="M:GTA.VehicleWheelCollection.GetAllWheels">
             <summary>
             Gets an <c>array</c> of all <see cref="T:GTA.VehicleWheel"/>s this <see cref="T:GTA.VehicleWheelCollection"/> has.
+            </summary>
+        </member>
+        <member name="T:GTA.ForceType">
+            <summary>
+            The apply force type.
+            </summary>
+        </member>
+        <member name="F:GTA.ForceType.InternalForce">
+            <summary>
+            Add a continuous internal force to the entity.
+            Force itself cannot detach any fragment parts of props like <see cref="F:GTA.ForceType.ExternalForce"/> can.
+            </summary>
+        </member>
+        <member name="F:GTA.ForceType.InternalImpulse">
+            <summary>
+            Add an instant internal impulse to the entity.
+            Impulse itself cannot detach any fragment parts of props like <see cref="F:GTA.ForceType.ExternalImpulse"/> can.
+            </summary>
+        </member>
+        <member name="F:GTA.ForceType.ExternalForce">
+            <summary>
+            Add a continuous external force to the entity.
+            Unlike <see cref="F:GTA.ForceType.InternalForce"/>, force itself can detach any fragment parts of props.
+            </summary>
+        </member>
+        <member name="F:GTA.ForceType.ExternalImpulse">
+            <summary>
+            Add an instant external impulse to the entity.
+            Unlike <see cref="F:GTA.ForceType.InternalImpulse"/>, impulse itself can detach any fragment parts of props.
+            </summary>
+        </member>
+        <member name="F:GTA.ForceType.ForceNoRot">
+            <summary>
+            Angular velocity will be changed with this value used, but it is unknown what kind of vector should be used.
+            Even Rockstar Games rarely use this value.
+            </summary>
+        </member>
+        <member name="F:GTA.ForceType.ForceRotPlusForce">
+            <summary>
+            Angular velocity will be changed with this value used, but it is unknown what kind of vector should be used.
+            Basically works just like <see cref="F:GTA.ForceType.ForceNoRot"/>, but the force will be multiplied by 102.931, which is calculated by <c>1.75f / (0.0340035 / 2.0f)</c>.
+            Even Rockstar Games rarely use this value.
             </summary>
         </member>
         <member name="P:GTA.Game.Player">

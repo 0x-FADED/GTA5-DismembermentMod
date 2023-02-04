@@ -9,7 +9,7 @@ using GTA.Native;
 
 namespace Dismemberment
 {
-    internal class DismembermentMain : Script
+    internal sealed class DismembermentMain : Script
     {
         [DllImport("DismembermentASI.asi", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void AddBoneDraw(int handle, int start, int end);
@@ -65,13 +65,13 @@ namespace Dismemberment
         {
             foreach (Ped ped in World.GetNearbyPeds(Game.Player.Character, 150f))
             {
-                if (ped != null && ped.Exists() && ped.GetPedLastBoneDamage() != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && ped.ExcludedPeds() != true && ped != Game.Player.Character)
+                if (ped != null && ped.Exists() && ped.Bones.LastDamaged.Tag != 0 && !ped.WasKilledByStealth && !ped.WasKilledByTakedown && ped.ExcludedPeds() != true && ped != Game.Player.Character)
                 {
                     foreach (string text in dismembermentWpns)
                     {
                         if (ped.HasBeenDamagedBy((WeaponHash)Game.GenerateHash(text)))
                         {
-                            Dismember(ped, ped.GetPedLastBoneDamage(), -1);
+                            Dismember(ped, (int)ped.Bones.LastDamaged.Tag, -1);
                         }
                     }
                     ped.ClearLastWeaponDamage();

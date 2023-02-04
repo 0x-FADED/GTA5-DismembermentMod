@@ -33,13 +33,6 @@ namespace Dismemberment
                 Function.Call(Hash.REMOVE_NAMED_PTFX_ASSET, lib);
             }
         }
-
-        internal static int GetPedLastBoneDamage(this Ped ped)
-        {
-            var outarg = new OutputArgument();
-            Function.Call<int>(Hash.GET_PED_LAST_DAMAGE_BONE, ped, outarg);
-            return outarg.GetResult<int>();
-        }
         internal static bool IsDLCInstalled()
         {
             return Function.Call<bool>(Hash.IS_DLC_PRESENT, 0x83E0D0E0);
